@@ -2,7 +2,7 @@ using FFTA, Test, LinearAlgebra
 
 @testset "backward. N=$N" for N in [8, 11, 15, 16, 27, 100]
     x = ones(Float64, N)
-    y = brfft(x, 2*(N-1))
+    y = FFTA.brfft(x, 2*(N-1))
     y_ref = 0*y
     y_ref[1] = 2*(N-1)
     if !isapprox(y_ref, y, atol=1e-12)
@@ -22,14 +22,14 @@ end
     end
 
     @testset "against naive implementation" begin
-        @test naive_1d_fourier_transform(xe, FFTA.FFT_BACKWARD) ≈ brfft(x, n)
+        @test naive_1d_fourier_transform(xe, FFTA.FFT_BACKWARD) ≈ FFTA.brfft(x, n)
     end
 
     @testset "allocation regression" begin
-        @test (@test_allocations brfft(x, n)) <= 50
+        @test (@test_allocations FFTA.brfft(x, n)) <= 50
     end
 end
 
 @testset "error messages" begin
-    @test_throws DimensionMismatch brfft(zeros(ComplexF64, 0), 0)
+    @test_throws DimensionMismatch FFTA.brfft(zeros(ComplexF64, 0), 0)
 end

@@ -51,16 +51,16 @@ Random.seed!(1)
             include("onedim/complex_forward.jl")
             include("onedim/complex_backward.jl")
             x = rand(ComplexF64, 100)
-            y = fft(x)
-            x2 = bfft(y)/length(x)
+            y = FFTA.fft(x)
+            x2 = FFTA.bfft(y)/length(x)
             @test x ≈ x2 atol=1e-12
         end
         @testset verbose = false "Real" begin
             include("onedim/real_forward.jl")
             include("onedim/real_backward.jl")
             x = rand(Float64, 100)
-            y = fft(x)
-            x2 = bfft(y)/length(x)
+            y = FFTA.fft(x)
+            x2 = FFTA.bfft(y)/length(x)
             @test x ≈ x2 atol=1e-12
         end
     end
@@ -69,16 +69,16 @@ Random.seed!(1)
             include("twodim/complex_forward.jl")
             include("twodim/complex_backward.jl")
             x = rand(ComplexF64, 100, 100)
-            y = fft(x)
-            x2 = bfft(y)/length(x)
+            y = FFTA.fft(x)
+            x2 = FFTA.bfft(y)/length(x)
             @test x ≈ x2
         end
         @testset verbose = true "Real" begin
             include("twodim/real_forward.jl")
             include("twodim/real_backward.jl")
             x = rand(Float64, 100, 100)
-            y = fft(x)
-            x2 = bfft(y)/length(x)
+            y = FFTA.fft(x)
+            x2 = FFTA.bfft(y)/length(x)
             @test x ≈ x2
         end
     end
