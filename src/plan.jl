@@ -4,8 +4,14 @@ import LinearAlgebra: mul!
 export FFTABackend
 struct FFTABackend <: AbstractFFTBackend end
 backend() = FFTABackend()
-activate!() = AbstractFFTs.set_active_backend!(FFTA)
 
+for f in (:fft, :bfft, :ifft, :fft!, :bfft!, :ifft!, :rfft, :brfft, :irfft)
+    pf = Symbol("plan_", f)
+    @eval begin
+        $f(x::AbstractArray, args...; kws...) = AbstractFFTs.$f(FFTABackend(), x, args...; kws...)
+        $pf(x::AbstractArray, args...; kws...) = AbstractFFTs.$pf(FFTABackend(), x, args...; kws...)
+    end
+end
 
 abstract type FFTAPlan{T,N} <: Plan{T} end
 
